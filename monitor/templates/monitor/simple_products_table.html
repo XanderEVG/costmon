@@ -1,0 +1,17 @@
+{% extends "monitor/base.html" %}
+
+{% block title %}monitor{% endblock %}
+
+
+
+{% block section_content %}
+    {% for item in items %}
+        <div>
+            <h2><a href="{{item.url}}">{{ item.title }}</a></h2>
+            <p>{{ item.store }}</p>
+            <p>{{ item.store.city }}</p>
+            <p>{{ item.article }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+

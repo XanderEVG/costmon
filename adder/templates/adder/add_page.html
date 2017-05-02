@@ -1,0 +1,192 @@
+{% extends "adder/base.html" %}
+{% load staticfiles %}
+{% block title %}Добавление товара{% endblock %}
+{% block pagename %}Добавление товара{% endblock %}
+{% block local_css %}<link href="{% static 'adder/css/adder-add.css' %}" rel="stylesheet">{% endblock %}
+{% block local_js %}<script type="text/javascript" src="{% static 'adder/js/adder-add.js' %}"></script>{% endblock %}
+
+{% block page_params %}
+    <div class="csrf_token">{% csrf_token %}</div>
+    {% if  item %}
+        <div class="delete_analog_url">{% url "delete_analog" %}</div>
+    {% endif %}
+    {% if  num_import %}
+        <div class="back_url">{% url "import_list" num_import %}</div>
+    {% else %}
+        <div class="back_url">{% url "import_list"  %}</div>
+    {% endif %}
+{% endblock %}
+
+
+{% block section_content %}
+    <div class="import-info">
+        <div>Ид импорта: {{num_import}}</div>
+        <div>Дата: {{import_date|date:"Y-m-d H:s"}}</div>
+        <div>Автор: {{import_autor}}</div>
+        <div>Комментарий: {% if item %}{{import_comment}}{% endif %}</div>
+    </div>
+    
+    
+     
+    
+    
+    
+    
+        <form id="add_new_import_item" method="post" action="{% url "append" %}">
+        {% csrf_token %}
+        <input type="hidden" name="num_import" id="num_import" value="{{ num_import }}">
+        
+        {% if item %}
+            <input type="hidden" name="item_id" id="item_id" value="{{ item.id }}">
+        {% else %}
+            <input type="hidden" name="item_id" id="item_id" value="-1">
+        {% endif %}
+        
+            <div class='edit-panel'>
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="sap">Код SAP:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                        <input type="text" name="sap" id="sap" required autocomplete="off" value="{{ item.sap }}">
+                    </div>
+                </div>
+                
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="article">Артикул:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                        <input type="text" name="article" id="article" autocomplete="off" value="{{ item.article }}">
+                    </div>
+                </div>
+                
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="title">Название:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                    <input type="text" name="title" id="title"  required autocomplete="off" value="{{ item.title }}">
+                    </div>
+                </div>
+                
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="ps-category-select">Категория:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                        <input type="hidden" name="category" required value="{{ item.cat_id }}">
+                        <div class="pseudo-select" id="ps-category-select" data-target="category">
+                            <button type="button" class="button button-dropdown pseudo-select-btn">&nbsp;<span class="ps-button-text" data-value="{{item.cat_id}}">{{item.cat_title}}</span></button>
+                            <div class="dropdown-list dropdown-hidden">
+                                {% load mptt_tags %}
+
+                                    <div class="pslvl-0" data-value="">Не определена</div>
+                                    {% recursetree categories %}
+                                        
+                                        {% if node.id == item.cat_id %}
+                                            {% if node.level > 8 %}
+                                                <div class="pslvl-hlvl element-selected" data-value="{{ node.id }}">{{ node.title }}</div>
+                                            {% else %}
+                                                <div class="pslvl-{{ node.level }} element-selected" data-value="{{ node.id }}">{{ node.title }}</div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if node.level > 8 %}
+                                                <div class="pslvl-hlvl" data-value="{{ node.id }}">{{ node.title }}</div>
+                                            {% else %}
+                                                <div class="pslvl-{{ node.level }}" data-value="{{ node.id }}">{{ node.title }}</div>
+                                            {% endif %}
+                                        {% endif %}
+                                        
+                                        {% if not node.is_leaf_node %}
+                                            {{ children }}
+                                        {% endif %}
+                                        
+                                    {% endrecursetree %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="ps-category-select">Город:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                        <input type="hidden" name="city" required value="{{ item.city_id }}">
+                        <div class="pseudo-select" id="ps-category-select" data-target="city">
+                            <button type="button" class="button button-dropdown pseudo-select-btn">&nbsp;<span class="ps-button-text" data-value="{{item.city_title}}"></span>{{item.city_title}}</button>
+                            <div class="dropdown-list dropdown-hidden">
+                                {% for city in cities %}
+                                    {% if city.id == item.city_id %}
+                                            <div class="pslvl-0 element-selected" data-value="{{ city.id }}">{{ city.title }}</div>
+                                    {% else %}
+                                        <div class="pslvl-0" data-value="{{ city.id }}">{{ city.title }}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="ep-row">
+                    <div class="ep-col ep-label">
+                        <label for="url">URL:</label>
+                    </div>
+                    <div class="ep-col ep-data">
+                    <input type="text" name="url" id="url" required autocomplete="off" value="{{ item.url }}">
+                    </div>
+                </div>
+                
+                <div class="ep-row no-border competitors-content">
+                    <div class="ep-col ep-label">
+                        <span style="font-weight: 700;">Конкуренты:</span><br>
+                    </div>
+                    
+                    <div class="ep-col ep-data">
+                        <label for="ps-competitor-select">Добавить:</label>
+                        <input type="hidden" name="competitor_temp">
+                        <div class="pseudo-select competitor" id="ps-competitor-select" data-target="competitor_temp">
+                            <button type="button" class="button button-dropdown pseudo-select-btn">&nbsp;<span class="ps-button-text" data-value=""></span></button>
+                            <div class="dropdown-list dropdown-hidden">
+                                {% for competitor in competitors %}
+                                    <div class="pslvl-0"   
+                                    {% if analogs_items %}
+                                        {% for analogs_item in analogs_items %}
+                                            {% if competitor.id == analogs_item.comp_id %}
+                                                style="display: none;"    
+                                            {% endif %}
+                                        {% endfor %} 
+                                    {% endif %}
+                                    data-value="{{ competitor.id }}">{{ competitor.title }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                {% for analogs_item in analogs_items %}
+                    <div class="ep-row no-border competitors-list exist" data-id="{{analogs_item.id}}">
+                        <div class="ep-col ep-label"><label>{{analogs_item.comp_title}}:</label></div>
+                        <div class="ep-col ep-data">
+                            <input type="text" class="competitor_input" name="competitor[{{analogs_item.comp_id}}]" autocomplete="off" value="{{analogs_item.url}}">
+                            <div class="del_competitor"><i class="fa fa-trash-o"></i></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="btn-controls">
+                <button type="button" class="btn btn-default">Отмена</button>
+                <button type="button" class="btn btn-primary save" form="add_new_import_item">Сохранить</button>
+                {% if not  item %}
+                    <button type="button" class="btn btn-primary save_and_new" form="add_new_import_item">Сохранить и добавить еще</button>
+                {% endif %}
+            </div>
+        </form>         
+{% endblock %}
+

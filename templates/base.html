@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% load staticfiles %}
+    <title>{% block title %}Типовая страница{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="XanderEVG">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    
+    {# media social #}
+
+    <!-- CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    {% block local_css %}{% endblock %}
+    
+    <!-- FONTS -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    
+    <!-- JS -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+    {% block local_js %}{% endblock %}
+        
+    {% block local_head %}{% endblock %}
+    
+</head>
+
+<body>
+    <div class="hidden page_params">
+    {% block page_params %}{% endblock %}
+    </div>
+    
+    <header>
+        <div class='logo-wrapper'><a href='/'><div class='logo'></div></a></div>
+        <div class='header-content'>
+            <div class='pagename'>{% block pagename %}Типовая страница{% endblock %}</div>
+        </div>
+        <div class='header-menu'>
+            <ul class='menu horisontal'>
+                <li>Список товаров</li>
+                <li>Импорт товаров</li>
+                <li>Поиск</li>
+            </ul>
+        </div>
+        <div class='clear'></div>
+    </header>
+    
+
+    
+    <div class='content-wrapper'>
+        <div class='messages-wrapper'></div>
+        <div class='left-sidebar'>
+        <div class="ls-opener"></div>
+            <ul class='menu'>
+                <li>func1</li>
+                <li>func2</li>
+                <li>func3</li>
+            </ul>
+        </div>
+        
+        
+        {% block section_content_top %}{% endblock %}
+        <div class='content-page'>
+            {% block section_content %}{% endblock %}
+        </div>
+        {% block section_content_bottom %}{% endblock %}
+    </div>
+    
+    <footer>
+        {% block local_footer %}{% endblock %}
+        {% include "footer.html" %}
+    </footer>
+</body>
+
+</html>

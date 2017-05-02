@@ -1,0 +1,38 @@
+.import-list-table {
+    min-width:70%;
+}
+
+.import-list-table .td_comment input[type="text"] {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    min-height: 32px;
+    width: 100%;
+    border-radius: 0;
+    border: none;  
+}
+
+.import-list-table .td_count {
+    width: 85px;  
+    text-align:center;
+}
+
+.btn-controls {
+  margin: -29px 10px 10px -4px;
+}
+
+
+.import-info{
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size:14px;
+}
+.import-items-table th{
+    background: #dadada;
+}
+.import-items-table td{
+    background: #f0f0f0;
+}
+
+.import-items-table .inner_td td{
+    background: #ffffff;
+}

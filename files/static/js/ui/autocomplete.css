@@ -1,0 +1,14 @@
+.ui-state-active {
+    border-left: 1px solid #dddddd !important; 
+    border-right: 1px solid #dddddd !important; 
+    border-top: 1px solid transparent !important; 
+    border-bottom: 1px solid transparent !important; 
+    background: #ffffff url(/img/ui/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x !important;
+    font-weight: bold !important;
+    color: #e87e15 !important;
+}
+
+li.ui-menu-item:last-child .ui-state-active {
+    border-bottom: 1px solid #dddddd !important;
+}
+

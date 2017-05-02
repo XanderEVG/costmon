@@ -1,0 +1,46 @@
+{% extends "adder/base.html" %}
+{% load staticfiles %}
+{% block title %}Импорт товара{% endblock %}
+{% block pagename %}Импорт товара{% endblock %}
+{% block local_css %}<link href="{% static 'adder/css/adder-list.css' %}" rel="stylesheet">{% endblock %}
+{% block local_js %}<script type="text/javascript" src="{% static 'adder/js/adder-list.js' %}"></script>{% endblock %}
+
+{% block page_params %}
+    <div class="comment_save_url">{% url "import_comment_save"  %}</div>
+    <div class="csrf_token">{% csrf_token %}</div>
+{% endblock %}
+
+
+
+{% block section_content %}
+    
+    <div class="btn-controls">
+        <a href='{% url "add_page" %}'><button type="button" class="btn btn-primary new-import" >Новый импорт</button></a>
+    </div>
+    
+    
+    <table class="{% if imports %}import-list-table{% endif %} {% if items %}import-items-table{% endif %}">
+        <thead>
+        <tr>
+                <th class='td_id'>ИД</th>
+                <th class='td_date'>Дата</th>
+                <th class='td_user'>Автор</th>
+                <th class='td_count'>Количество товаров</th>
+                <th class='td_comment'>Комментарий</th>     
+        </tr>
+        </thead> 
+
+
+    {% for import_row in imports %}
+        <tr class="tr_link">
+            <td class='td_id'><a class="table-row-link" href='{% url "import_list" num_import=import_row.import_id %}'>{{ import_row.import_id }}</a></td>
+            <td class='td_date'><a class="table-row-link" href='{% url "import_list" num_import=import_row.import_id %}'>{{ import_row.import_date|date:"Y-m-d H:s" }}</a></td>
+            <td class='td_user'><a class="table-row-link" href='{% url "import_list" num_import=import_row.import_id %}'>{{ import_row.username }}</a></td>
+            <td class='td_count'><a class="table-row-link" href='{% url "import_list" num_import=import_row.import_id %}'>{{ import_row.count }}</a></th>
+            <td class='td_comment'><input class='import-row-comment' data-id="{{ import_row.import_id }}" type="text" value="{{ import_row.comment|default:"" }}"></td>
+        </tr>
+    {% endfor %}   
+    </table>
+    
+{% endblock %}
+

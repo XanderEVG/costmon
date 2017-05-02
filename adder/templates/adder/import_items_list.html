@@ -1,0 +1,77 @@
+{% extends "adder/base.html" %}
+{% load staticfiles %}
+{% block title %}Импорт товара{% endblock %}
+{% block pagename %}Импорт товара{% endblock %}
+{% block local_css %}<link href="{% static 'adder/css/adder-list.css' %}" rel="stylesheet">{% endblock %}
+{% block local_js %}<script type="text/javascript" src="{% static 'adder/js/adder-list.js' %}"></script>{% endblock %}
+
+{% block page_params %}
+    <div class="comment_save_url">{% url "import_comment_save"  %}</div>
+    <div class="csrf_token">{% csrf_token %}</div>
+{% endblock %}
+
+
+
+{% block section_content %}
+    
+    <div class="btn-controls">       
+        <a href='{% url "add_page" import_id %}'><button type="button" class="btn btn-primary add_item-btn" >Добавить</button></a>
+        <a href='{% url "delete" import_id %}'><button type="button" class="btn btn-primary delete-all-btn" >Удалить все</button></a>
+    </div>
+
+
+    <div class="import-info">
+        <div>Ид импорта: {{import_id}}</div>
+        <div>Дата: {{import_date|date:"Y-m-d H:s"}}</div>
+        <div>Автор: {{import_autor}}</div>
+        <div>Комментарий: {{import_comment}}</div>
+    </div>
+    
+    
+    <table class="{% if imports %}import-list-table{% endif %} {% if items %}import-items-table{% endif %}">
+        <thead>
+        <tr>
+            <th class='td_sap'>Код</th>
+            <th class='td_category'>Категория</th>
+            <th class='td_title'>Название</th>
+            <th class='td_store'>Магазин</th>
+            <th class='td_url'>URL</th>
+            <th class='td_url'>Ctrl</th>            
+        </tr>
+        </thead> 
+
+
+        
+
+    {% for item in items %}
+        <tr data-item_id="{{ item.our_item.id }}">
+            <td class='td_sap'>
+                { % if item.analogs % }
+                    <button type="button" class="unhide-aitem-btn" title="Развернуть"><i class="fa fa-plus-square-o"></i></button>
+                { % else % }
+                    <div class="unhide-aitem-dummy"></div>
+                { % endif % }
+                {{ item.our_item.sap }}
+            </td>
+            <td class='td_category'>{{ item.our_item.category }}</td>
+            <td class='td_title'>{{ item.our_item.title }}</td>
+            <td class='td_store'>{{ item.our_item.store }}</td>
+            <td class='td_url'><a href="{{ item.our_item.url }}">{{ item.our_item.url }}</a></td>
+            <td class='td_control'>
+                <a href='{% url "delete" import_id item.our_item.id  %}'><button type="button" class="delete-item-btn" title="Удалить"><i class="fa fa-trash-o"></i></button></a>
+                <a href='{% url "import_item_edit" import_id item.our_item.id  %}'><button type="button" class="edit-item-btn" title="Редактировать"><i class="fa fa-pencil"></i></button></a>
+            </td>
+        </tr>
+        {% for analog_item in item.analogs %}
+            <tr class='inner_td hidden' data-item_id="{{ analog_item.analog_id }}" data-parent_id="{{ analog_item.parent_id }}">
+                <td class='td_astore' colspan="3">{{ analog_item.analog_store }}</td>
+                <td class='td_aurl' colspan="4">{{ analog_item.analog_url }}</td>            
+            </tr>
+        {% endfor %}
+        
+    {% endfor %}
+          
+    </table>
+    
+{% endblock %}
+
