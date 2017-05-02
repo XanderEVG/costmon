@@ -26,7 +26,10 @@ SECRET_KEY = 'iw(7lqr$2x(=#_(qpoo6kvyvcli4@9%!6e3nm3&#b^umg2#g-u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'xanderevg.pythonanywhere.com',
+    'localhost'
+]
 
 
 # Application definition
@@ -110,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
-INTERNAL_IPS = ( '127.0.0.1' )
+INTERNAL_IPS = ( '127.0.0.1' , 'xanderevg.pythonanywhere.com',)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
